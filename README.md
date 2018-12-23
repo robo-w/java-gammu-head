@@ -1,6 +1,4 @@
-# REST Head for Gammu
-
-REST Header for Gammu, written in Java.
+# REST-Like Head for Gammu
 
 [Gammu] is an open source tool to control GSM devices.
 This Java head provides an easy way to send text messages via a JSON interface.

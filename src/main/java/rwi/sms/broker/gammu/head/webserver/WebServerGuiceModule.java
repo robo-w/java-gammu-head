@@ -5,7 +5,7 @@ import rwi.sms.broker.gammu.head.startup.WebServerStarter;
 
 import javax.inject.Singleton;
 
-public class WebserverGuiceModule extends AbstractModule {
+public class WebServerGuiceModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(WebServerStarter.class).to(SparkStarter.class).in(Singleton.class);
