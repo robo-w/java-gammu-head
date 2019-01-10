@@ -38,7 +38,7 @@ Message payload:
 }
 ```
 
-The authentication token can be configured on startup of the server. (Not implemented yet)
+The authentication token can be configured on startup of the server with the second commandline parameter.
 
 ## Required Hardware
 
@@ -67,6 +67,6 @@ For Windows some code adaptions are needed (e.g. the name of the executable of g
   * On Raspbian you should add the pi user to the groups "gammu", "tty" and "dialout" by `sudo usermod -a -G dialout,gammu,tty pi`. Do not forget to re-login pi to apply the new user groups.
   * Some of the common Huawei data sticks change their serial port numbering during operation. You can prevent broken links by using the exact device name by id. For example `/dev/serial/by-id/usb-HUAWEI_Technology_HUAWEI_Mobile-if00-port0`
 * Install java: `sudo apt-get install openjdk-8-jre`
-* Start java-gammu head: `java -jar java-gammu-head-1.0.0.jar`
+* Start java-gammu head: `java -jar java-gammu-head-1.0.0.jar 8080 SOMESECRETTOKEN`
 * The JSON endpoint is now available on port `8080`.
 

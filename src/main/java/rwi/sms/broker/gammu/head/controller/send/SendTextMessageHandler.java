@@ -5,6 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import rwi.sms.broker.gammu.head.configuration.WebServerConfiguration;
 import rwi.sms.broker.gammu.head.contract.send.SendResult;
 import rwi.sms.broker.gammu.head.contract.send.SendTextMessageRequest;
 import rwi.sms.broker.gammu.head.contract.send.SendTextMessageResponse;
@@ -15,6 +16,7 @@ import spark.Response;
 import spark.Route;
 
 import javax.inject.Inject;
+import java.util.Objects;
 import java.util.Optional;
 
 public class SendTextMessageHandler implements Route {
@@ -23,12 +25,18 @@ public class SendTextMessageHandler implements Route {
     private final Gson gson;
     private final TextMessageQueue messageQueue;
     private final TextMessageFactory messageFactory;
+    private final WebServerConfiguration webServerConfiguration;
 
     @Inject
-    public SendTextMessageHandler(final Gson gson, final TextMessageQueue messageQueue, final TextMessageFactory messageFactory) {
+    public SendTextMessageHandler(
+            final Gson gson,
+            final TextMessageQueue messageQueue,
+            final TextMessageFactory messageFactory,
+            final WebServerConfiguration webServerConfiguration) {
         this.gson = gson;
         this.messageQueue = messageQueue;
         this.messageFactory = messageFactory;
+        this.webServerConfiguration = webServerConfiguration;
     }
 
     @Override
@@ -50,7 +58,7 @@ public class SendTextMessageHandler implements Route {
         } else if (sendTextMessageRequest.isPresent()) {
             sendTextMessageResponse = new SendTextMessageResponse(SendResult.AUTHENTICATION_FAILED);
             response.status(403);
-        } else  {
+        } else {
             sendTextMessageResponse = new SendTextMessageResponse(SendResult.MALFORMED_REQUEST_BODY);
             response.status(400);
         }
@@ -59,8 +67,19 @@ public class SendTextMessageHandler implements Route {
     }
 
     private boolean tokenIsValid(final String authenticationToken) {
-        // TODO implement authentication
-        return StringUtils.isNotBlank(authenticationToken);
+        boolean valid = false;
+        if (StringUtils.isNotBlank(authenticationToken)) {
+            String configuredToken = webServerConfiguration.getAuthenticationToken();
+            if (Objects.equals(authenticationToken.trim(), configuredToken)) {
+                valid = true;
+            } else {
+                LOG.debug("Provided token '{}' does not match the configured token '{}'.", authenticationToken, configuredToken);
+            }
+        } else {
+            LOG.debug("The provided authentication token '{}' is empty.", authenticationToken);
+        }
+
+        return valid;
     }
 
     private Optional<SendTextMessageRequest> readTypedRequest(final Request request) {

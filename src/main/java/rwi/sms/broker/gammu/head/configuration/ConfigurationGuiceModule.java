@@ -8,12 +8,20 @@ import rwi.sms.broker.gammu.head.controller.send.AustrianPhoneNumberValidator;
 import rwi.sms.broker.gammu.head.controller.send.PhoneNumberValidator;
 
 import javax.inject.Singleton;
+import java.util.Objects;
 
 public class ConfigurationGuiceModule extends AbstractModule {
+    private final WebServerConfiguration webServerConfiguration;
+
+    public ConfigurationGuiceModule(final WebServerConfiguration webServerConfiguration) {
+        this.webServerConfiguration = Objects.requireNonNull(webServerConfiguration);
+    }
+
     @Override
     protected void configure() {
         bind(Gson.class).toProvider(GsonProvider.class).in(Singleton.class);
         bind(JsonTransformer.class).in(Singleton.class);
         bind(PhoneNumberValidator.class).to(AustrianPhoneNumberValidator.class).in(Singleton.class);
+        bind(WebServerConfiguration.class).toInstance(webServerConfiguration);
     }
 }
