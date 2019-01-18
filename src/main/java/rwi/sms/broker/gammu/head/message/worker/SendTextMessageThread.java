@@ -44,7 +44,7 @@ public class SendTextMessageThread implements Runnable {
     private void sendNextMessageFromQueue() throws InterruptedException {
         LOG.trace("Waiting for next message from queue.");
         TextMessage textMessage = textMessageQueue.waitForNextMessage();
-        LOG.trace("Got next message to send: {}", textMessage);
+        LOG.debug("Writing message to send to external sms daemon: {}", textMessage);
         List<PhoneNumber> failedTargets = sendTextMessage(textMessage);
         reQueueFailedTargetsIfNecessary(textMessage, failedTargets);
     }
