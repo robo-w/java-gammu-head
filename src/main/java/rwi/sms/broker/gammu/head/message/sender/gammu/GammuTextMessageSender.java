@@ -5,6 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rwi.sms.broker.gammu.head.configuration.GammuSmsdConfiguration;
+import rwi.sms.broker.gammu.head.controller.send.ValidatingTextMessageFactory;
 import rwi.sms.broker.gammu.head.message.data.PhoneNumber;
 import rwi.sms.broker.gammu.head.message.data.TextMessage;
 import rwi.sms.broker.gammu.head.message.sender.SendTextMessageResult;
@@ -93,7 +94,7 @@ public class GammuTextMessageSender implements TextMessageSender {
                 "TEXT",
                 target.getNumber(),
                 "-autolen",
-                "140");
+                ValidatingTextMessageFactory.MAXIMUM_MESSAGE_CONTENT_LENGTH + "");
         ProcessBuilder processBuilder = new ProcessBuilder(commandArguments);
         processBuilder.redirectErrorStream(true);
         return processBuilder;

@@ -16,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 public class ValidatingTextMessageFactory implements TextMessageFactory {
     private static final Logger LOG = LoggerFactory.getLogger(ValidatingTextMessageFactory.class);
-    private static final int MAXIMUM_MESSAGE_CONTENT_LENGTH = 140;
+    public static final int MAXIMUM_MESSAGE_CONTENT_LENGTH = 280;
     private final PhoneNumberValidator phoneNumberValidator;
 
     @Inject
@@ -58,9 +58,13 @@ public class ValidatingTextMessageFactory implements TextMessageFactory {
     }
 
     private String truncateMessageContent(final String requestedMessageContent) {
-        return requestedMessageContent.length() > MAXIMUM_MESSAGE_CONTENT_LENGTH
-                ? requestedMessageContent.substring(0, MAXIMUM_MESSAGE_CONTENT_LENGTH)
-                : requestedMessageContent;
+        String truncatedMessage = requestedMessageContent;
+        if (requestedMessageContent.length() > MAXIMUM_MESSAGE_CONTENT_LENGTH) {
+            LOG.debug("Got message with length of {}. Truncated to {} characters.", requestedMessageContent.length(), MAXIMUM_MESSAGE_CONTENT_LENGTH);
+            truncatedMessage = requestedMessageContent.substring(0, MAXIMUM_MESSAGE_CONTENT_LENGTH);
+        }
+
+        return truncatedMessage;
     }
 
     private TextMessageTarget createMessageTarget(final List<String> targetPhoneNumbers) {
