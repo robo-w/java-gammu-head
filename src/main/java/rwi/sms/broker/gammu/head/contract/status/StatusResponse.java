@@ -9,11 +9,17 @@ public class StatusResponse implements Serializable {
     private final String serviceName;
     private final String apiVersion;
     private final int queuedTextMessages;
+    private final GammuStatistics gammuStatistics;
 
-    public StatusResponse(final String serviceName, final String apiVersion, final int queuedTextMessages) {
+    public StatusResponse(
+            final String serviceName,
+            final String apiVersion,
+            final int queuedTextMessages,
+            final GammuStatistics gammuStatistics) {
         this.serviceName = serviceName;
         this.apiVersion = apiVersion;
         this.queuedTextMessages = queuedTextMessages;
+        this.gammuStatistics = gammuStatistics;
     }
 
     public String getServiceName() {
@@ -28,6 +34,10 @@ public class StatusResponse implements Serializable {
         return queuedTextMessages;
     }
 
+    public GammuStatistics getGammuStatistics() {
+        return gammuStatistics;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;
@@ -35,12 +45,13 @@ public class StatusResponse implements Serializable {
         StatusResponse that = (StatusResponse) o;
         return queuedTextMessages == that.queuedTextMessages &&
                 Objects.equals(serviceName, that.serviceName) &&
-                Objects.equals(apiVersion, that.apiVersion);
+                Objects.equals(apiVersion, that.apiVersion) &&
+                Objects.equals(gammuStatistics, that.gammuStatistics);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(serviceName, apiVersion, queuedTextMessages);
+        return Objects.hash(serviceName, apiVersion, queuedTextMessages, gammuStatistics);
     }
 
     @Override
@@ -49,6 +60,7 @@ public class StatusResponse implements Serializable {
                 "serviceName='" + serviceName + '\'' +
                 ", apiVersion='" + apiVersion + '\'' +
                 ", queuedTextMessages=" + queuedTextMessages +
+                ", gammuStatistics=" + gammuStatistics +
                 '}';
     }
 }

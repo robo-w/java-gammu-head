@@ -41,6 +41,8 @@ public class SendTextMessageHandler implements Route {
 
     @Override
     public SendTextMessageResponse handle(final Request request, final Response response) {
+        response.type("application/json");
+
         SendTextMessageResponse sendTextMessageResponse;
         Optional<SendTextMessageRequest> sendTextMessageRequest = readTypedRequest(request);
 
